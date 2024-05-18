@@ -24,8 +24,10 @@ environment {
           script {
             bat '''
             dir
+	    echo 'Running Terraform Apply'
             terraform init
             terraform plan
+	    terraform apply 
             '''
           }
         }
@@ -38,10 +40,10 @@ environment {
         }
           steps {
             script {
-              echo 'Hello World'
+              echo 'Running Terraform Apply'
               bat '''
-              terraform --version
-              dir
+	      dir
+              terraform destroy
               '''
             }
           }
