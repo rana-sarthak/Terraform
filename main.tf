@@ -14,7 +14,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "my_bucket" {
-  bucket = "MyTestBucket"
+  bucket = "rana-test-bucket-live-chat"
 
   tags = {
     Name        = "MyTestBucket"
