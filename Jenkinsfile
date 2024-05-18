@@ -2,6 +2,7 @@ pipeline {
   agent any
   parameters {
     choice(name: 'ACTION', choices: ['Apply', 'Destroy'], description: 'Select the action')
+    booleanParam(name: 'Apply', defaultValue: false, description: 'True will apply the plan, default is false')
   }
 
 environment {
@@ -14,7 +15,7 @@ environment {
         git branch: 'main', url: 'https://github.com/rana-sarthak/Terraform.git'
       }
     }
-    stage('Terraform Apply') {
+    stage('Terraform Apply Plan') {
       when {
         expression {
           params.ACTION == 'Apply'
@@ -24,15 +25,31 @@ environment {
           script {
             bat '''
             dir
-	    echo 'Running Terraform Apply'
+	    echo 'Running Terraform Apply Plan'
             terraform init
-            terraform plan
-	    terraform apply 
+            terraform plan -out=tfplan
             '''
           }
         }
       }
-      stage('Terraform Destroy') {
+stage('Terraform Apply') {
+      when {
+        expression {
+          params.ACTION == 'Apply'
+	  return params.Apply
+        }
+      }
+        steps {
+          script {
+            bat '''
+            dir
+	    echo 'Running Terraform Apply'
+	    terraform apply -auto-approve tfplan
+            '''
+          }
+        }
+      }
+      stage('Terraform Destroy plan') {
         when {
           expression {
             params.ACTION == 'Destroy'
@@ -40,13 +57,31 @@ environment {
         }
           steps {
             script {
-              echo 'Running Terraform Apply'
+              echo 'Running Terraform Destroy plan'
               bat '''
 	      dir
-              terraform destroy
+              terraform plan -destroy
               '''
             }
           }
         }
+stage('Terraform Destroy') {
+        when {
+          expression {
+            params.ACTION == 'Destroy'
+	    return params.Apply
+          }
+        }
+          steps {
+            script {
+              echo 'Running Terraform Destroy'
+              bat '''
+	      dir
+              terraform destroy -auto-approve
+              '''
+            }
+          }
+        }
+
       }
     }
