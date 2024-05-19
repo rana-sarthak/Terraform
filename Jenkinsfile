@@ -35,8 +35,7 @@ environment {
 stage('Terraform Apply') {
       when {
         expression {
-          params.ACTION == 'Apply'
-	  return params.Apply
+          return (params.ACTION == 'Apply' && params.Apply)
         }
       }
         steps {
@@ -68,8 +67,7 @@ stage('Terraform Apply') {
 stage('Terraform Destroy') {
         when {
           expression {
-            params.ACTION == 'Destroy'
-	    return params.Apply
+            return (params.ACTION == 'Destroy' && params.Apply)
           }
         }
           steps {
