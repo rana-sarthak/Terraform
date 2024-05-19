@@ -1,2 +1,10 @@
 Save the tfstate in local machine so that next time the terraform plan/apply/destroy runs it has the tfstate present.
 	1: We can do this by saving the tfstate file on host machine
+
+Above is done.
+
+Next : 
+	1 : Create a simple .net project and its 
+	2 : dockerfile and
+	3 : CI/CD pipeline and (to push the image to ECR)
+	4 : github repository. 
