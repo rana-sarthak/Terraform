@@ -25,9 +25,11 @@ environment {
           script {
             bat '''
             dir
-	    echo 'Running Terraform Apply Plan'
-            terraform init
-            terraform plan -out=tfplan
+	        echo 'Running Terraform Apply Plan'
+	        move /Y main.tf "X:\\Terraform Workspace"
+	        cd /d X:\\Terraform Workspace
+	        terraform plan -out=tfplan
+            dir
             '''
           }
         }
@@ -42,8 +44,9 @@ stage('Terraform Apply') {
           script {
             bat '''
             dir
-	    echo 'Running Terraform Apply'
-	    terraform apply -auto-approve tfplan
+	        echo 'Running Terraform Apply'
+	        cd /d X:\\Terraform Workspace
+	        terraform apply -auto-approve tfplan
             '''
           }
         }
@@ -58,7 +61,9 @@ stage('Terraform Apply') {
             script {
               echo 'Running Terraform Destroy plan'
               bat '''
-	      dir
+              move /Y main.tf "X:\\Terraform Workspace"
+	          cd /d X:\\Terraform Workspace
+	          dir
               terraform plan -destroy
               '''
             }
@@ -74,7 +79,8 @@ stage('Terraform Destroy') {
             script {
               echo 'Running Terraform Destroy'
               bat '''
-	      dir
+	          dir
+	          cd /d X:\\Terraform Workspace
               terraform destroy -auto-approve
               '''
             }
